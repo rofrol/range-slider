@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<title>range slider</title>
+<style type="text/css">
+.slider {
+  margin-top:10px; margin-bottom:20px;
+}
+#colorBox {
+  width: 50px; height: 50px; border: 1px solid black; background-color: white;
+}
+</style>
+</head>
+<body>
+<div class="slider" id="R" style=""></div>
+<div class="slider" id="G" style="margin-top:10px;margin-bottom:20px;"></div>
+<div class="slider" id="B" style="margin-top:10px;margin-bottom:20px;"></div>
+<div id="colorBox" style=""></div>
+
+<script src="slider.js"></script>
+<script src="customEvent.js"></script>
+<script>
+function parseColor(colorString) {
+  var colorsOnly = colorString.split(")");
+  colorsOnly = colorsOnly[0].split("(");
+  colorsOnly = colorsOnly[1].split(",");
+  return colorsOnly;
+}
+function combineColors(input) {
+  return (input.length == 4? "rgba": "rgb") + "(" + input.join(",") + ")";
+}
+function setBackgroundColor(e, selector, index) {
+    var backgroundColor = window.getComputedStyle(document.querySelector(selector)).backgroundColor
+    var colors = parseColor(backgroundColor);
+    colors[index] = e.detail.value;
+    document.querySelector(selector).style.backgroundColor = combineColors(colors);
+}
+
+document.querySelector('#R').addEventListener('change', function(e) { 
+    setBackgroundColor(e, '#colorBox', 0);
+});
+
+document.querySelector('#G').addEventListener('change', function(e) { 
+    setBackgroundColor(e, '#colorBox', 1);
+});
+
+document.querySelector('#B').addEventListener('change', function(e) { 
+    setBackgroundColor(e, '#colorBox', 2);
+});
+
+var R = Slider.constructor(document.querySelector("#R"));
+var G = Slider.constructor(document.querySelector("#G"));
+var B = Slider.constructor(document.querySelector("#B"));
+R.setPercentage(0.3);
+G.setPercentage(0.2);
+B.setPercentage(0.6);
+
+</script>
+
+</body>
+</html>
